@@ -1,0 +1,120 @@
+{% extends "ledger/layout.html" %} 
+
+{% block title %}
+Login - Personal Finance   
+{% endblock %}
+
+
+
+
+{% block navbar %}
+<nav class="backdrop-blur-2xl bg-white/10 shadow-xl border border-white/10 p-4 h-20 flex justify-between items-center rounded-2xl mx-4 my-2 sticky top-0 z-50">
+
+  <!-- Logo Section -->
+  <div class="flex items-center space-x-4">
+      <a href="{% url 'home' %}"><h1 class="text-3xl font-extrabold text-blue-700">NestLedger</h1></a>
+  </div>
+
+  <!-- Centered Calendar and Time -->
+  <div class="flex flex-col items-center flex-1">
+      <span id="current-date" class="text-red-700 font-semibold"></span>
+      <span id="current-time" class="text-red-700 font-semibold"></span>
+  </div>
+
+  <!-- Mobile Menu Button -->
+  <button class="md:hidden block text-gray-700 text-2xl focus:outline-none" onclick="toggleMenu()">☰</button>
+
+  <!-- Navigation Links -->
+  <ul class="hidden md:flex space-x-6" id="mobile-menu">
+      <li><a href="#features" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-300">Features</a></li>
+      <li><a href="#about" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-300">About</a></li>
+      <li><a href="#contact" class="text-gray-700 hover:text-blue-600 font-semibold transition duration-300">Contact</a></li>
+      <li><a href="{% url 'signup' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md transition duration-300">SignUp</a></li>
+  </ul>
+</nav>
+{% endblock %}
+
+
+
+
+{% block content %}
+<div class="bg-gradient-to-r from-blue-50 to-purple-50 flex items-center justify-center min-h-screen">
+    
+  <div class="animate-fade-in bg-white p-8 rounded-xl shadow-2xl w-full max-w-md transform transition-all hover:shadow-3xl">
+    <div class="text-center mb-8">
+      <h1 class="text-4xl font-bold text-gray-800 mb-2">Welcome Back!</h1>
+      <p class="text-gray-600">Log in to manage your personal finances.</p>
+    </div>
+    <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+        {% if messages %}
+        {% for message in messages %}
+          <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-3 mb-4 rounded fade-out">
+            <p>{{ message }}</p>
+          </div>
+        {% endfor %}
+      {% endif %}
+      
+      <script>
+        // Remove error message after 2 seconds
+        setTimeout(() => {
+          document.querySelectorAll('.fade-out').forEach(el => {
+            el.style.transition = "opacity 0.5s";
+            el.style.opacity = "0"; 
+            setTimeout(() => el.remove(), 500); // Remove from DOM after fading
+          });
+        }, 2000);
+      </script>
+
+      <div class="mb-6">
+        <label for="username" class="block text-sm font-medium text-gray-700 mb-1">Username</label>
+        <input
+          type="username"
+          id="username"
+          name="username"
+          placeholder="john.doe"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          required
+        />
+      </div>
+      <div class="mb-6">
+        <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          placeholder="••••••••"
+          class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all"
+          required
+        />
+      </div>
+      <div class="mb-6 flex items-center justify-between">
+        <div class="flex items-center">
+          <input
+            type="checkbox"
+            id="rememberMe"
+            name="remember_me"
+            class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+          />
+          <label for="rememberMe" class="ml-2 block text-sm text-gray-700">Remember me</label>
+        </div>
+        <a href="{% url 'password_reset' %}" class="text-sm text-blue-600 hover:text-blue-500">Forgot password?</a>
+      </div>
+      <div class="mb-6">
+        <button
+          type="submit"
+          class="w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white py-3 px-4 rounded-lg hover:from-blue-700 hover:to-purple-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all"
+        >
+          Log In
+        </button>
+      </div>
+      <div class="text-center">
+        <p class="text-sm text-gray-600">
+          Don't have an account?
+          <a href="{% url 'signup' %}" class="text-blue-600 hover:text-blue-500 font-semibold transition-all">Sign up</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}
