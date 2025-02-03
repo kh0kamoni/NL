@@ -125,6 +125,9 @@ def user_logout(request):
 
 @login_required
 def send_confirmation(request):
+    pending_loan_count = LoanRequest.pending_count(request.user)
+    unread_notifications = Notification.unread_count(request.user)
+
     if request.method == "POST":
         borrower_id = request.POST.get("borrower_id")
         amount = request.POST.get("amount")
@@ -156,13 +159,23 @@ def send_confirmation(request):
         return redirect("profile")
 
     users = User.objects.exclude(id=request.user.id)  # Exclude self
-    return render(request, "ledger/send_confirmation.html", {"users": users})
+    return render(request, "ledger/send_confirmation.html", {
+        "users": users,
+        "pending_loan_count": pending_loan_count,
+        "unread_notifications": unread_notifications,
+        })
 
 
 @login_required
 def confirm_loan(request):
+    pending_loan_count = LoanRequest.pending_count(request.user)
+    unread_notifications = Notification.unread_count(request.user)
     pending_requests = LoanRequest.objects.filter(borrower=request.user, status="pending")
-    return render(request, "ledger/confirm_loan.html", {"pending_requests": pending_requests})
+    return render(request, "ledger/confirm_loan.html", {
+        "pending_requests": pending_requests,
+        "pending_loan_count": pending_loan_count,
+        "unread_notifications": unread_notifications,
+        })
 
 
 
@@ -207,6 +220,8 @@ def reject_loan(request, loan_confirm_id):
 
 @login_required
 def edit_profile(request):
+    pending_loan_count = LoanRequest.pending_count(request.user)
+    unread_notifications = Notification.unread_count(request.user)
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
         profile_form = ProfileUpdateForm(request.POST, instance=request.user.userprofile)
@@ -221,12 +236,18 @@ def edit_profile(request):
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.userprofile)
 
-    return render(request, 'ledger/edit_profile.html', {'user_form': user_form, 'profile_form': profile_form})
+    return render(request, 'ledger/edit_profile.html', {
+        'user_form': user_form, 'profile_form': profile_form,
+        "pending_loan_count": pending_loan_count,
+        "unread_notifications": unread_notifications,
+        })
 
 
 
 @login_required
 def transaction(request):
+    pending_loan_count = LoanRequest.pending_count(request.user)
+    unread_notifications = Notification.unread_count(request.user)
     if request.method == "POST":
         transaction_form = TransactionForm(request.POST)
         if transaction_form.is_valid():
@@ -241,6 +262,8 @@ def transaction(request):
     return render(request, "ledger/transaction.html", {
         "transaction_form": transaction_form,
         "request": request,
+        "pending_loan_count": pending_loan_count,
+        "unread_notifications": unread_notifications,
     })
 
 
@@ -248,6 +271,8 @@ def transaction(request):
 
 @login_required
 def pay_for_others(request):
+    pending_loan_count = LoanRequest.pending_count(request.user)
+    unread_notifications = Notification.unread_count(request.user)
     UserAmountFormSet = formset_factory(UserAmountForm, extra=1)  # Allow adding multiple users
 
     if request.method == 'POST':
@@ -299,30 +324,47 @@ def pay_for_others(request):
 
     return render(request, 'ledger/pay_for_others.html', {
         'pay_form': pay_form,
-        'user_amount_formset': user_amount_formset
+        'user_amount_formset': user_amount_formset,
+        "pending_loan_count": pending_loan_count,
+        "unread_notifications": unread_notifications,
     })
 
 
 
 @login_required
 def payment_success(request):
-    return render(request, 'ledger/payment_success.html')
+    pending_loan_count = LoanRequest.pending_count(request.user)
+    unread_notifications = Notification.unread_count(request.user)
+    return render(request, 'ledger/payment_success.html', {
+        "pending_loan_count": pending_loan_count,
+        "unread_notifications": unread_notifications,
+    })
 
 
 
 @login_required
 def view_notifications(request):
+    pending_loan_count = LoanRequest.pending_count(request.user)
+    unread_notifications = Notification.unread_count(request.user)
     notifications = request.user.notifications.order_by('-timestamp')
-    return render(request, 'ledger/notifications.html', {'notifications': notifications})
+    return render(request, 'ledger/notifications.html', {
+        'notifications': notifications,
+        "pending_loan_count": pending_loan_count,
+        "unread_notifications": unread_notifications,
+        })
 
 
 @login_required
 def mark_notification_read(request, id):
+    pending_loan_count = LoanRequest.pending_count(request.user)
+    unread_notifications = Notification.unread_count(request.user)
     notification = get_object_or_404(Notification, id=id, user=request.user)
     notification.is_read = True
     notification.save()
     return render(request, "ledger/notification_details.html", {
-        "notification": notification
+        "notification": notification,
+        "pending_loan_count": pending_loan_count,
+        "unread_notifications": unread_notifications,
     })
 
 
@@ -342,6 +384,8 @@ def delete_notification(request, nid):
 
 @login_required
 def view_transactions(request):
+    pending_loan_count = LoanRequest.pending_count(request.user)
+    unread_notifications = Notification.unread_count(request.user)
     user = request.user
     transactions = Transaction.objects.filter(user=user)
 
@@ -352,6 +396,8 @@ def view_transactions(request):
         "transactions": transactions,
         "total_income": total_income,
         "total_expense": total_expense,
+        "pending_loan_count": pending_loan_count,
+        "unread_notifications": unread_notifications,
     })
 
 

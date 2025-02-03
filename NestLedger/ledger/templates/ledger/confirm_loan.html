@@ -1,6 +1,9 @@
 {% extends "ledger/layout.html" %}
 {% load static %}
 
+{% block title %}
+    Confirm loan you have taken
+{% endblock %}
 
 
 {% block head %}
@@ -121,20 +124,22 @@
                         <div class="flex justify-between items-center">
                             <div>
                                 <p class="text-lg font-medium text-gray-900">
-                                    {{ request.lender.username }} said, you took loan of amoun: {{ request.amount }}
+                                    <span class="font-semibold">{{ request.lender.username }}</span> said, you took a loan of amount: <span class="font-semibold">${{ request.amount }}</span>
                                 </p>
                                 <p class="text-sm text-gray-500">Request ID: {{ request.id }}</p>
                             </div>
                             <div class="flex space-x-4">
-                                <form method="POST" action="{% url 'approve_loan' request.id %}">
+                                <!-- Approve Loan Form -->
+                                <form method="POST" action="{% url 'approve_loan' request.id %}" aria-label="Approve Loan Request">
                                     {% csrf_token %}
-                                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-150 ease-in-out">
+                                    <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-green-400">
                                         Approve
                                     </button>
                                 </form>
-                                <form method="POST" action="{% url 'reject_loan' request.id %}">
+                                <!-- Reject Loan Form -->
+                                <form method="POST" action="{% url 'reject_loan' request.id %}" aria-label="Reject Loan Request">
                                     {% csrf_token %}
-                                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-150 ease-in-out">
+                                    <button type="submit" class="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-red-400">
                                         Reject
                                     </button>
                                 </form>
@@ -145,8 +150,11 @@
             </ul>
         </div>
     {% else %}
-        <p class="text-gray-600">No pending loan requests.</p>
+        <div class="bg-gray-50 p-4 rounded-lg">
+            <p class="text-gray-600 text-center">No pending loan requests.</p>
+        </div>
     {% endif %}
 </div>
+
 <script src="{% static 'ledger/nestledger.js' %}"></script>
 {% endblock %}

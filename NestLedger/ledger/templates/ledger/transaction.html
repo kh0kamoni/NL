@@ -118,7 +118,16 @@
                     {% endfor %}
                 </div>
             {% endif %}
-
+                 <script>
+                        // Remove error message after 2 seconds
+                        setTimeout(() => {
+                          document.querySelectorAll('.fade-out').forEach(el => {
+                            el.style.transition = "opacity 0.5s";
+                            el.style.opacity = "0"; 
+                            setTimeout(() => el.remove(), 500); // Remove from DOM after fading
+                          });
+                        }, 2000);
+                      </script>
             <!-- Form Section -->
             <h1 class="text-2xl font-bold mb-6 text-gray-800">Record a Transaction</h1>
             <form method="POST" action="{% url 'transaction' %}" class="space-y-4">
@@ -140,16 +149,7 @@
                         </div>
                     {% endfor %}
 
-                    <script>
-                        // Remove error message after 2 seconds
-                        setTimeout(() => {
-                          document.querySelectorAll('.fade-out').forEach(el => {
-                            el.style.transition = "opacity 0.5s";
-                            el.style.opacity = "0"; 
-                            setTimeout(() => el.remove(), 500); // Remove from DOM after fading
-                          });
-                        }, 2000);
-                      </script>
+                   
                 </div>
 
                 <!-- Submit Button -->
