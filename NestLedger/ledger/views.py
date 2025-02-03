@@ -358,6 +358,16 @@ def view_transactions(request):
 
 
 
+@login_required
+def repay(request, lid):
+    user = request.user
+    loan = get_object_or_404(Loan, id=lid)
+    if loan.borrower != user:
+        messages.error(request, "You're not authorized for this action.")
+    loan.status = "paid"
+    loan.save()
+    messages.success(request, "Loan paid successfully.")
+    return redirect("profile")
 
 
 

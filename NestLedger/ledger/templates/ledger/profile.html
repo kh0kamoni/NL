@@ -159,22 +159,44 @@ Login - Personal Finance
                 </div>
             </div>
 
+
             <!-- Loans Given Section -->
             <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Loans Given</h2>
                 <div class="overflow-y-auto custom-scrollbar max-h-96">
                     <ul class="space-y-3">
                         {% for loan in loans_given %}
-                        <li class="bg-gray-50 p-4 rounded-lg shadow-sm">
-                            <p class="text-gray-700"><span class="font-semibold">Borrower:</span> {{ loan.borrower.username }}</p>
-                            <p class="text-gray-700"><span class="font-semibold">Amount:</span> ${{ loan.amount }}</p>
-                            <p class="text-gray-700"><span class="font-semibold">Status:</span> {{ loan.status }}</p>
-                            <p class="text-gray-700"><span class="font-semibold">Date:</span> {{ loan.timestamp }}</p>
+                        <li class="bg-white p-5 rounded-lg shadow-md border border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-gray-800 text-lg font-semibold">Borrower: <span class="text-blue-600">{{ loan.borrower.username }}</span></p>
+                                    <p class="text-gray-700"><span class="font-semibold">Amount:</span> ${{ loan.amount }}</p>
+                                    <p class="text-gray-700"><span class="font-semibold">Status:</span> 
+                                        <span class="px-2 py-1 rounded-md 
+                                            {% if loan.status == 'paid' %}bg-green-100 text-green-600{% else %}bg-yellow-100 text-yellow-600{% endif %}">
+                                            {{ loan.status|title }}
+                                        </span>
+                                    </p>
+                                    <p class="text-gray-600 text-sm">🗓 {{ loan.timestamp|date:"M d, Y - H:i A" }}</p>
+                                </div>
+
+                                <!-- <div>
+                                    {% if loan.status == "paid" %}
+                                    <p class="text-red-500 font-semibold">⚠ Already Paid</p>
+                                    {% else %}
+                                        <a href="{% url 'repay' loan.id %}" class="inline-block bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md hover:bg-green-600 transition">
+                                            Pay Back
+                                        </a>
+                                    {% endif %}
+                                </div> -->
+                            </div>
                         </li>
                         {% endfor %}
+
                     </ul>
                 </div>
             </div>
+
 
             <!-- Loans Received Section -->
             <div class="bg-white rounded-lg shadow-md p-6 mb-6">
@@ -182,13 +204,33 @@ Login - Personal Finance
                 <div class="overflow-y-auto custom-scrollbar max-h-96">
                     <ul class="space-y-3">
                         {% for loan in loans_received %}
-                        <li class="bg-gray-50 p-4 rounded-lg shadow-sm">
-                            <p class="text-gray-700"><span class="font-semibold">Lender:</span> {{ loan.lender.username }}</p>
-                            <p class="text-gray-700"><span class="font-semibold">Amount:</span> ${{ loan.amount }}</p>
-                            <p class="text-gray-700"><span class="font-semibold">Status:</span> {{ loan.status }}</p>
-                            <p class="text-gray-700"><span class="font-semibold">Date:</span> {{ loan.timestamp }}</p>
+                        <li class="bg-white p-5 rounded-lg shadow-md border border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-gray-800 text-lg font-semibold">Lender: <span class="text-blue-600">{{ loan.lender.username }}</span></p>
+                                    <p class="text-gray-700"><span class="font-semibold">Amount:</span> ${{ loan.amount }}</p>
+                                    <p class="text-gray-700"><span class="font-semibold">Status:</span> 
+                                        <span class="px-2 py-1 rounded-md 
+                                            {% if loan.status == 'paid' %}bg-green-100 text-green-600{% else %}bg-yellow-100 text-yellow-600{% endif %}">
+                                            {{ loan.status|title }}
+                                        </span>
+                                    </p>
+                                    <p class="text-gray-600 text-sm">🗓 {{ loan.timestamp|date:"M d, Y - H:i A" }}</p>
+                                </div>
+
+                                <div>
+                                    {% if loan.status == "paid" %}
+                                    <p class="text-red-500 font-semibold">⚠ Already Paid</p>
+                                    {% else %}
+                                        <a href="{% url 'repay' loan.id %}" class="inline-block bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-semibold shadow-md hover:bg-green-600 transition">
+                                            Pay Back
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
                         </li>
                         {% endfor %}
+
                     </ul>
                 </div>
             </div>

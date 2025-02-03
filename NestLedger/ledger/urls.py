@@ -19,6 +19,7 @@ urlpatterns = [
 
     # URL for the "Pay for Others" form
     path('pay/', views.pay_for_others, name='pay_for_others'),
+    path("repay/<int:lid>/", views.repay, name="repay"),
 
     # URL for the payment success page
     path('payment-success/', views.payment_success, name='payment_success'),
