@@ -1,4 +1,11 @@
 {% extends "ledger/layout.html" %}
+{% load static %}
+
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'ledger/styles.css' %}">
+{% endblock %}
+
 
 {% block navbar %}
 <nav class="backdrop-blur-2xl bg-white/10 shadow-xl border border-white/10 p-4 h-20 flex justify-between items-center rounded-2xl mx-4 my-2 sticky top-0 z-50">
@@ -43,6 +50,14 @@
   <button class="md:hidden block text-gray-700 text-2xl focus:outline-none" onclick="toggleMenu()">☰</button>
 
   <!-- Navigation Links -->
+  <ul class="hidden md:flex space-x-6" id="mobile-menu">
+    <li><a href="{% url 'edit_profile' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md transition duration-300">Edit Profile</a></li>
+    <li>
+        <div class="text-center">
+            <a href="{% url 'logout' %}" class="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition duration-300">Logout</a>
+        </div>
+    </li>
+</ul>
 
 </nav>
 {% endblock %}
@@ -62,12 +77,12 @@
 
         <a href="{% url 'transaction' %}" 
            class="block py-3 px-4 rounded-lg {% if request.path == '/transaction/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
-           Transactions
+           Add Transaction
         </a>
 
         <a href="{% url 'confirm_loan' %}" 
            class="block py-3 px-4 rounded-lg {% if request.path == '/confirm_loan/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
-           Confirm Received Loan
+           Confirm Loan
         </a>
 
         <a href="{% url 'send_confirmation' %}" 
@@ -78,6 +93,10 @@
         <a href="{% url 'pay_for_others' %}" 
            class="block py-3 px-4 rounded-lg {% if request.path == '/pay/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
            Pay For Others
+        </a>
+        <a href="{% url 'transactions_list' %}" 
+           class="block py-3 px-4 rounded-lg {% if request.path == '/transactions_list/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+           Transactions History
         </a>
 
         <!-- <a href="{% url 'view_notifications' %}" 
@@ -168,7 +187,7 @@
     </form>
 </div>
 
-<script>
+<script> 
 document.addEventListener('DOMContentLoaded', function() {
     const container = document.getElementById('user-amount-forms');
     const addButton = document.getElementById('add-user-form');
@@ -244,4 +263,6 @@ document.addEventListener('DOMContentLoaded', function() {
     updateSplitCalculations();
 });
 </script>
+
+<script src="{% static 'ledger/nestledger.js' %}"></script>
 {% endblock %}

@@ -5,10 +5,13 @@
 Login - Personal Finance   
 {% endblock %}
 
+
 {% block head %}
-    <script src="{% static 'ledger/nestledger.js' %}"></script>
-    <!-- <link rel="stylesheet" href="{% static 'ledger/styles.css' %}"> -->
+<link rel="stylesheet" href="{% static 'ledger/styles.css' %}">
 {% endblock %}
+
+
+
 
 <body class="bg-gray-100">
     {% block navbar %}
@@ -90,7 +93,7 @@ Login - Personal Finance
 
         <a href="{% url 'transaction' %}" 
            class="block py-3 px-4 rounded-lg {% if request.path == '/transaction/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
-           Transactions
+           Add Transaction
         </a>
 
         <a href="{% url 'confirm_loan' %}" 
@@ -112,6 +115,11 @@ Login - Personal Finance
         <a href="{% url 'pay_for_others' %}" 
            class="block py-3 px-4 rounded-lg {% if request.path == '/pay_for_others/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
            Pay For Others
+        </a>
+
+        <a href="{% url 'transactions_list' %}" 
+           class="block py-3 px-4 rounded-lg {% if request.path == '/transactions_list/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+           Transactions History
         </a>
 
         <!-- <a href="{% url 'view_notifications' %}" 
@@ -200,7 +208,7 @@ Login - Personal Finance
             </div> -->
         </div>
     </div>
-
+    <script src="{% static 'ledger/nestledger.js' %}"></script>
     {% endblock %}
 
 

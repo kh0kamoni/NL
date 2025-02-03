@@ -38,7 +38,10 @@ class Transaction(models.Model):
     timestamp = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.user.username} {self.transaction_type} {self.amount} by {self.payment_method} for {self.category}"
+        return f"{self.transaction_type}: {self.amount} by {self.payment_method} for {self.category}"
+    
+
+
     
 
 
@@ -52,18 +55,6 @@ class Loan(models.Model):
     def __str__(self):
         return f"{self.borrower} took loan of {self.amount} from {self.lender}"
 
-    def update_balance(self):
-        if self.status == 'approved':
-            lender_profile = self.lender.userprofile
-            borrower_profile = self.borrower.userprofile
-
-            # Lender gives money, so their balance decreases
-            lender_profile.balance += self.amount
-            # Borrower receives money, so their balance increases
-            borrower_profile.balance -= self.amount
-
-            lender_profile.save()
-            borrower_profile.save()
 
     def mark_paid(self):
         if self.status == 'approved':

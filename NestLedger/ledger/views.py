@@ -183,7 +183,7 @@ def approve_loan(request, loan_confirm_id):
     )
     # loan.save()
     # Update balances
-    loan.update_balance()
+    # loan.update_balance()
 
     # Delete the loan request
     loan_request.delete()
@@ -215,7 +215,7 @@ def edit_profile(request):
             user_form.save()
             profile_form.save()
             messages.success(request, "Your profile has been updated!")
-            return redirect('profile')
+            return redirect('edit_profile')
 
     else:
         user_form = UserUpdateForm(instance=request.user)
@@ -230,7 +230,9 @@ def transaction(request):
     if request.method == "POST":
         transaction_form = TransactionForm(request.POST)
         if transaction_form.is_valid():
-            transaction = transaction_form.save()
+            transaction = transaction_form.save(commit=False)
+            transaction.user = request.user  # Assign the logged-in user
+            transaction.save() 
             messages.success(request, "Transaction created successfully!")
             return redirect("transaction")
         else:
@@ -335,3 +337,33 @@ def delete_notification(request, nid):
     notification = get_object_or_404(Notification, id=nid, user=request.user)
     notification.delete()
     return redirect("view_notifications")
+
+
+
+@login_required
+def view_transactions(request):
+    user = request.user
+    transactions = Transaction.objects.filter(user=user)
+
+    total_income = sum(transaction.amount for transaction in transactions if transaction.transaction_type == "income")
+    total_expense = sum(transaction.amount for transaction in transactions if transaction.transaction_type == "expense")
+
+    return render(request, "ledger/view_transactions.html", {
+        "transactions": transactions,
+        "total_income": total_income,
+        "total_expense": total_expense,
+    })
+
+
+
+
+
+
+
+
+
+
+
+
+
+

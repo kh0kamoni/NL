@@ -1,6 +1,12 @@
 {% extends "ledger/layout.html" %}
+{% load static %}
 
 {% block title %} Record a Transaction {% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'ledger/styles.css' %}">
+{% endblock %}
+
 
 {% block navbar %}
 <nav class="backdrop-blur-2xl bg-white/10 shadow-xl border border-white/10 p-4 h-20 flex justify-between items-center rounded-2xl mx-4 my-2 sticky top-0 z-50">
@@ -42,6 +48,14 @@
 
   <!-- Mobile Menu Button -->
   <button class="md:hidden block text-gray-700 text-2xl focus:outline-none" onclick="toggleMenu()">☰</button>
+  <ul class="hidden md:flex space-x-6" id="mobile-menu">
+    <li><a href="{% url 'edit_profile' %}" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg shadow-md transition duration-300">Edit Profile</a></li>
+    <li>
+        <div class="text-center">
+            <a href="{% url 'logout' %}" class="bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition duration-300">Logout</a>
+        </div>
+    </li>
+</ul>
 </nav>
 {% endblock %}
 
@@ -58,12 +72,12 @@
 
         <a href="{% url 'transaction' %}" 
            class="block py-3 px-4 rounded-lg {% if request.path == '/transaction/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
-           Transactions
+           Add Transaction
         </a>
 
         <a href="{% url 'confirm_loan' %}" 
            class="block py-3 px-4 rounded-lg {% if request.path == '/confirm_loan/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
-           Confirm Received Loan
+           Confirm Loan
         </a>
 
         <a href="{% url 'send_confirmation' %}" 
@@ -74,6 +88,11 @@
         <a href="{% url 'pay_for_others' %}" 
            class="block py-3 px-4 rounded-lg {% if request.path == '/pay_for_others/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
            Pay For Others
+        </a>
+
+        <a href="{% url 'transactions_list' %}" 
+           class="block py-3 px-4 rounded-lg {% if request.path == '/transactions_list/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+           Transactions History
         </a>
 
         <!-- <a href="{% url 'view_notifications' %}" 
@@ -89,7 +108,7 @@
         <div class="max-w-2xl mx-auto bg-white shadow-md rounded-lg p-6">
             <!-- Messages Section -->
             {% if messages %}
-                <div class="mb-6">
+                <div class="mb-6 fade-out" > 
                     {% for message in messages %}
                         <p class="p-4 text-sm rounded-lg 
                                   {% if message.tags == 'error' %}bg-red-100 text-red-700
@@ -120,6 +139,17 @@
                             {% endif %}
                         </div>
                     {% endfor %}
+
+                    <script>
+                        // Remove error message after 2 seconds
+                        setTimeout(() => {
+                          document.querySelectorAll('.fade-out').forEach(el => {
+                            el.style.transition = "opacity 0.5s";
+                            el.style.opacity = "0"; 
+                            setTimeout(() => el.remove(), 500); // Remove from DOM after fading
+                          });
+                        }, 2000);
+                      </script>
                 </div>
 
                 <!-- Submit Button -->
@@ -148,4 +178,7 @@
         box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1); /* Add a subtle focus ring */
     }
 </style>
+
+
+<script src="{% static 'ledger/nestledger.js' %}"></script>
 {% endblock %}

@@ -41,4 +41,36 @@
         });
 
 
+    // Function to mark a notification as read
+    function markAsRead(notificationId) {
+        // Send a GET request to mark the notification as read
+        fetch(`/mark_as_read/${notificationId}/`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': '{{ csrf_token }}'  // Include CSRF token
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === 'success') {
+                // Remove the bold styling to indicate it's read
+                document.getElementById('notification-' + notificationId).classList.remove('font-bold');
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // Attach event listeners to notification items to mark them as read
+    document.querySelectorAll('.notification-item').forEach(item => {
+        item.addEventListener('click', function () {
+            const notificationId = this.dataset.notificationId;
+            markAsRead(notificationId);
+        });
+    });
+
+
+
+
+
 

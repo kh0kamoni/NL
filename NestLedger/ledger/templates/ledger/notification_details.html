@@ -1,10 +1,18 @@
 {% extends "ledger/layout.html" %}
+{% load static %}
 
 {% block title %}
     Notification deatils
 {% endblock %}
 
+{% block head %}
+<link rel="stylesheet" href="{% static 'ledger/styles.css' %}">
+{% endblock %}
+
+
 
 {% block content %}
     {{ notification }}
+
+    <script src="{% static 'ledger/nestledger.js' %}"></script>
 {% endblock %}

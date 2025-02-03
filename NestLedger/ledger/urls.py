@@ -14,6 +14,7 @@ urlpatterns = [
     path('reject-loan/<int:loan_confirm_id>/', views.reject_loan, name='reject_loan'),
     path('edit-profile/', views.edit_profile, name='edit_profile'),
     path("transaction/", views.transaction, name="transaction"),
+    path("transactions_list/", views.view_transactions, name="transactions_list"),
 
 
     # URL for the "Pay for Others" form

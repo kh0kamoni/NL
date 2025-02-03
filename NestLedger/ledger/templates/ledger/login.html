@@ -1,10 +1,14 @@
 {% extends "ledger/layout.html" %} 
+{% load static %}
 
 {% block title %}
 Login - Personal Finance   
 {% endblock %}
 
 
+{% block head %}
+<link rel="stylesheet" href="{% static 'ledger/styles.css' %}">
+{% endblock %}
 
 
 {% block navbar %}
@@ -117,4 +121,6 @@ Login - Personal Finance
     </form>
   </div>
 </div>
+
+<script src="{% static 'ledger/nestledger.js' %}"></script>
 {% endblock %}

@@ -1,4 +1,12 @@
 {% extends "ledger/layout.html" %}
+{% load static %}
+
+
+
+{% block head %}
+<link rel="stylesheet" href="{% static 'ledger/styles.css' %}">
+{% endblock %}
+
 
 {% block navbar %}
 <nav class="backdrop-blur-2xl bg-white/10 shadow-xl border border-white/10 p-4 h-20 flex justify-between items-center rounded-2xl mx-4 my-2 sticky top-0 z-50">
@@ -69,4 +77,6 @@
         </div>
     </div>
 </div>
+
+<script src="{% static 'ledger/nestledger.js' %}"></script>
 {% endblock %}

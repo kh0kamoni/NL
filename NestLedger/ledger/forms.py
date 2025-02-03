@@ -17,7 +17,7 @@ class ProfileUpdateForm(forms.ModelForm):
 class TransactionForm(forms.ModelForm):
     class Meta:
         model = Transaction
-        fields = "__all__"
+        fields = ['amount', 'category', 'payment_method', 'transaction_type']
 
 
 
