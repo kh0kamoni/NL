@@ -55,27 +55,27 @@
     <div class="text-2xl font-bold text-gray-800 mb-8">MyFinance</div>
     <nav class="space-y-3">  <!-- Added space between elements -->
         <a href="{% url 'profile' %}" 
-           class="block py-3 px-4 rounded-lg {% if request.path == '/ledger/profile/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+           class="block py-3 px-4 rounded-lg {% if request.path == '/profile/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
            Profile
         </a>
 
         <a href="{% url 'transaction' %}" 
-           class="block py-3 px-4 rounded-lg {% if request.path == '/ledger/transaction/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+           class="block py-3 px-4 rounded-lg {% if request.path == '/transaction/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
            Transactions
         </a>
 
         <a href="{% url 'confirm_loan' %}" 
-           class="block py-3 px-4 rounded-lg {% if request.path == '/ledger/confirm_loan/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+           class="block py-3 px-4 rounded-lg {% if request.path == '/confirm_loan/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
            Confirm Received Loan
         </a>
 
         <a href="{% url 'send_confirmation' %}" 
-           class="block py-3 px-4 rounded-lg {% if request.path == '/ledger/send_confirmation/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+           class="block py-3 px-4 rounded-lg {% if request.path == '/send_confirmation/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
            Notify Borrower
         </a>
 
         <a href="{% url 'pay_for_others' %}" 
-           class="block py-3 px-4 rounded-lg {% if request.path == '/ledger/pay_for_others/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+           class="block py-3 px-4 rounded-lg {% if request.path == '/pay_for_others/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
            Pay For Others
         </a>
 

@@ -1,99 +1,18 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}NestLedger - Manage Shared Expenses{% endblock %}</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        function toggleMenu() {
-            document.getElementById('mobile-menu').classList.toggle('hidden');
-        }
+    {% block head %}{% endblock %}
+    <link rel="stylesheet" href="{% static 'ledger/styles.css' %}">
 
-        // Function to update the time and date
-    function updateTime() {
-        const now = new Date();
-        // Format the date (e.g., "October 10, 2023")
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        const dateString = now.toLocaleDateString(undefined, options);
-        document.getElementById('current-date').textContent = dateString;
-        // Format the time with seconds (e.g., "14:35:07")
-        const timeString = now.toLocaleTimeString();
-        document.getElementById('current-time').textContent = timeString;
-    }
-
-    // Update the time every second
-    setInterval(updateTime, 1000);
-
-    // Initialize the time and date immediately
-    updateTime();
-
-    // Function to trigger the loading animation
-    function startLoadingAnimation() {
-        const dateTimeContainer = document.getElementById('date-time-container');
-        const loadingAnimation = document.getElementById('loading-animation');
-
-        // Collapse the date and time
-        dateTimeContainer.classList.add('animate-collapse');
-        setTimeout(() => {
-            dateTimeContainer.classList.add('hidden');
-            loadingAnimation.classList.remove('hidden');
-        }, 300); // Match the duration of the collapse animation
-    }
-
-    // Add event listeners to all links to trigger the loading animation
-    document.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', (event) => {
-            // Prevent default behavior for demonstration purposes (remove this line in production)
-            // event.preventDefault();
-
-            // Start the loading animation
-            startLoadingAnimation();
-        });
-    });
-
-    // Add event listener for page reload
-    window.addEventListener('beforeunload', () => {
-        startLoadingAnimation();
-    });
-</script>
-<style>
-    /* Collapse animation */
-    @keyframes collapse {
-        from {
-            opacity: 1;
-            transform: scale(1);
-        }
-        to {
-            opacity: 0;
-            transform: scale(0.5);
-        }
-    }
-
-    .animate-collapse {
-        animation: collapse 0.3s ease-in-out forwards;
-    }
-</style>
-    
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <style>
-        /* Custom scrollbar */
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: #f1f1f1;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #888;
-            border-radius: 4px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: #555;
-        }
 
-        
-    </style>
+    
 </head>
 <body class="bg-gradient-to-br from-blue-50 to-purple-100 text-gray-900 min-h-screen flex flex-col">
     <!-- Navbar -->
@@ -134,5 +53,7 @@
     <footer class="bg-white-900 text-center p-1 rounded-l shadow-lg mt-auto">
         <p class="text-lg">&copy; 2025 NestLedger. All Rights Reserved.</p>
     </footer>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{% static 'ledger/nestledger.js'}"></script>
 </body>
 </html>

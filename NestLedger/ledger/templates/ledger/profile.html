@@ -1,13 +1,16 @@
 {% extends "ledger/layout.html" %}
-
+{% load static %}
 
 {% block title %}
 Login - Personal Finance   
 {% endblock %}
 
+{% block head %}
+    <script src="{% static 'ledger/nestledger.js' %}"></script>
+    <!-- <link rel="stylesheet" href="{% static 'ledger/styles.css' %}"> -->
+{% endblock %}
+
 <body class="bg-gray-100">
-
-
     {% block navbar %}
     <nav class="backdrop-blur-2xl bg-white/10 shadow-xl border border-white/10 p-4 h-20 flex justify-between items-center rounded-2xl mx-4 my-2 sticky top-0 z-50">
 
@@ -68,72 +71,8 @@ Login - Personal Finance
             </li>
         </ul>
     </nav>
-    <script>
-        // Function to update the time and date
-        function updateTime() {
-            const now = new Date();
-            // Format the date (e.g., "October 10, 2023")
-            const options = { year: 'numeric', month: 'long', day: 'numeric' };
-            const dateString = now.toLocaleDateString(undefined, options);
-            document.getElementById('current-date').textContent = dateString;
-            // Format the time with seconds (e.g., "14:35:07")
-            const timeString = now.toLocaleTimeString();
-            document.getElementById('current-time').textContent = timeString;
-        }
-    
-        // Update the time every second
-        setInterval(updateTime, 1000);
-    
-        // Initialize the time and date immediately
-        updateTime();
-    
-        // Function to trigger the loading animation
-        function startLoadingAnimation() {
-            const dateTimeContainer = document.getElementById('date-time-container');
-            const loadingAnimation = document.getElementById('loading-animation');
-    
-            // Collapse the date and time
-            dateTimeContainer.classList.add('animate-collapse');
-            setTimeout(() => {
-                dateTimeContainer.classList.add('hidden');
-                loadingAnimation.classList.remove('hidden');
-            }, 300); // Match the duration of the collapse animation
-        }
-    
-        // Add event listeners to all links to trigger the loading animation
-        document.querySelectorAll('a').forEach(link => {
-            link.addEventListener('click', (event) => {
-                // Prevent default behavior for demonstration purposes (remove this line in production)
-                // event.preventDefault();
-    
-                // Start the loading animation
-                startLoadingAnimation();
-            });
-        });
-    
-        // Add event listener for page reload
-        window.addEventListener('beforeunload', () => {
-            startLoadingAnimation();
-        });
-    </script>
-    
-    <style>
-        /* Collapse animation */
-        @keyframes collapse {
-            from {
-                opacity: 1;
-                transform: scale(1);
-            }
-            to {
-                opacity: 0;
-                transform: scale(0.5);
-            }
-        }
-    
-        .animate-collapse {
-            animation: collapse 0.3s ease-in-out forwards;
-        }
-    </style>
+
+
     {% endblock %}
 
 
@@ -145,17 +84,17 @@ Login - Personal Finance
     <div class="text-2xl font-bold text-gray-800 mb-8">MyFinance</div>
     <nav class="space-y-3">  <!-- Added space between elements -->
         <a href="{% url 'profile' %}" 
-           class="block py-3 px-4 rounded-lg {% if request.path == '/ledger/profile/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+           class="block py-3 px-4 rounded-lg {% if request.path == '/profile/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
            Profile
         </a>
 
         <a href="{% url 'transaction' %}" 
-           class="block py-3 px-4 rounded-lg {% if request.path == '/ledger/transaction/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+           class="block py-3 px-4 rounded-lg {% if request.path == '/transaction/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
            Transactions
         </a>
 
         <a href="{% url 'confirm_loan' %}" 
-        class="block py-3 px-4 rounded-lg {% if request.path == '/ledger/confirm_loan/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}"
+        class="block py-3 px-4 rounded-lg {% if request.path == '/confirm_loan/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}"
         aria-current="{% if request.path == '/ledger/confirm_loan/' %}page{% else %}false{% endif %}">
          Confirm Loan
          {% if pending_loan_count > 0 %}
@@ -166,12 +105,12 @@ Login - Personal Finance
      </a>
 
         <a href="{% url 'send_confirmation' %}" 
-           class="block py-3 px-4 rounded-lg {% if request.path == '/ledger/send_confirmation/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+           class="block py-3 px-4 rounded-lg {% if request.path == '/send_confirmation/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
            Notify Borrower
         </a>
 
         <a href="{% url 'pay_for_others' %}" 
-           class="block py-3 px-4 rounded-lg {% if request.path == '/ledger/pay_for_others/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+           class="block py-3 px-4 rounded-lg {% if request.path == '/pay_for_others/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
            Pay For Others
         </a>
 
