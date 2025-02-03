@@ -76,8 +76,14 @@
         </a>
 
         <a href="{% url 'confirm_loan' %}" 
-           class="block py-3 px-4 rounded-lg {% if request.path == '/confirm_loan/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
-           Confirm Loan
+        class="block py-3 px-4 rounded-lg {% if request.path == '/confirm_loan/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}"
+        aria-current="{% if request.path == '/ledger/confirm_loan/' %}page{% else %}false{% endif %}">
+         Confirm Loan
+         {% if pending_loan_count > 0 %}
+             <span class="ml-2 inline-flex items-center justify-center w-5 h-5 bg-red-600 text-white text-xs font-bold rounded-full">
+                 {{ pending_loan_count }}
+             </span>
+         {% endif %}
         </a>
 
         <a href="{% url 'send_confirmation' %}" 

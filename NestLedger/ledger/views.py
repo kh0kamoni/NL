@@ -299,15 +299,25 @@ def pay_for_others(request):
 
                 for form in user_amount_formset:
                     user = form.cleaned_data['user']
+                    payer = request.user
                     if user:  # Ensure a user is selected
                         PaymentDetail.objects.create(
                             payment=payment,
                             user=user,
                             amount=amount_per_user,
                         )
+                        LoanRequest.objects.create(
+                            lender = payer,
+                            borrower = user,
+                            amount = amount_per_user,
+                            status = "pending",
+
+                        )
+
             else:
                 # Use custom amounts for each user
                 for form in user_amount_formset:
+                    payer = request.user
                     user = form.cleaned_data['user']
                     amount = form.cleaned_data['amount']
                     if user and amount:  # Ensure both user and amount are provided
@@ -315,6 +325,13 @@ def pay_for_others(request):
                             payment=payment,
                             user=user,
                             amount=amount
+                        )
+                        LoanRequest.objects.create(
+                            lender = payer,
+                            borrower = user,
+                            amount = amount,
+                            status = "pending",
+
                         )
 
             return redirect('payment_success')  # Redirect to a success page

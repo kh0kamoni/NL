@@ -56,21 +56,6 @@ class Loan(models.Model):
         return f"{self.borrower} took loan of {self.amount} from {self.lender}"
 
 
-    def mark_paid(self):
-        if self.status == 'approved':
-            lender_profile = self.lender.userprofile
-            borrower_profile = self.borrower.userprofile
-
-            # Borrower repays money, so their balance decreases
-            borrower_profile.balance -= self.amount
-            # Lender receives money, so their balance increases
-            lender_profile.balance += self.amount
-
-            lender_profile.save()
-            borrower_profile.save()
-
-            self.status = 'paid'
-            self.save()
 
 
 
