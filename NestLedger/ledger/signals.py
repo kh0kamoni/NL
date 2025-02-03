@@ -1,6 +1,6 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from .models import PaymentDetail, Notification,Transaction, UserProfile
+from .models import PaymentDetail, Notification,Transaction, UserProfile, Loan
 
 @receiver(post_save, sender=PaymentDetail)
 def send_payment_notification(sender, instance, created, **kwargs):

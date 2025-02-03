@@ -60,6 +60,7 @@ class Loan(models.Model):
 
 
 
+
 class LoanRequest(models.Model):
     lender = models.ForeignKey(User, related_name='loan_requests_sent', on_delete=models.CASCADE)
     borrower = models.ForeignKey(User, related_name='loan_requests_received', on_delete=models.CASCADE)

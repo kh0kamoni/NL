@@ -105,7 +105,7 @@
                  {{ pending_loan_count }}
              </span>
          {% endif %}
-     </a>
+        </a>
 
         <a href="{% url 'send_confirmation' %}" 
            class="block py-3 px-4 rounded-lg {% if request.path == '/send_confirmation/' %}bg-blue-50 text-blue-600 font-semibold{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
@@ -144,7 +144,7 @@
     </div>
     <div class="text-center">
         <p class="text-4xl font-extrabold text-gray-800 mb-2">Welcome back,</p>
-        <p class="text-3xl font-semibold text-indigo-600 mb-4">{{ user.username }}</p>
+        <p class="text-3xl font-semibold text-indigo-600 mb-4">{{ user.first_name }} ({{ user.username }})</p>
         <p class="text-lg text-gray-600">Your current balance is</p>
         <p class="text-2xl font-semibold text-green-600 mt-2">${{ user.userprofile.balance }}</p>
     </div>
@@ -198,7 +198,7 @@
                         <li class="bg-white p-5 rounded-lg shadow-md border border-gray-200">
                             <div class="flex justify-between items-center">
                                 <div>
-                                    <p class="text-gray-800 text-lg font-semibold">Borrower: <span class="text-blue-600">{{ loan.borrower.username }}</span></p>
+                                    <p class="text-gray-800 text-lg font-semibold">Borrower: <span class="text-blue-600">{{ loan.borrower.first_name }}</span></p>
                                     <p class="text-gray-700"><span class="font-semibold">Amount:</span> ${{ loan.amount }}</p>
                                     <p class="text-gray-700"><span class="font-semibold">Status:</span> 
                                         <span class="px-2 py-1 rounded-md 
@@ -226,7 +226,7 @@
                         <li class="bg-white p-5 rounded-lg shadow-md border border-gray-200">
                             <div class="flex justify-between items-center">
                                 <div>
-                                    <p class="text-gray-800 text-lg font-semibold">Lender: <span class="text-blue-600">{{ loan.lender.username }}</span></p>
+                                    <p class="text-gray-800 text-lg font-semibold">Lender: <span class="text-blue-600">{{ loan.lender.first_name }}</span></p>
                                     <p class="text-gray-700"><span class="font-semibold">Amount:</span> ${{ loan.amount }}</p>
                                     <p class="text-gray-700"><span class="font-semibold">Status:</span> 
                                         <span class="px-2 py-1 rounded-md 
