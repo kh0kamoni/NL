@@ -31,5 +31,6 @@ class PayForOthersForm(forms.Form):
 class UserAmountForm(forms.Form):
     user = forms.ModelChoiceField(queryset=User.objects.all(), label="Select User")
     amount = forms.DecimalField(max_digits=10, decimal_places=2, label="Amount", required=False)
+    deadline = forms.DateField(required=False, widget=forms.DateInput(attrs={'type': 'date'}))
 
 UserAmountFormSet = formset_factory(UserAmountForm, extra=1)

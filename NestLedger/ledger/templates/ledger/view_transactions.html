@@ -110,10 +110,10 @@ View Transactions
             <!-- Transaction Summary -->
             <div class="mb-6 flex justify-between items-center p-4 bg-gray-100 rounded-lg shadow-sm">
                 <div class="text-green-600 font-bold text-lg">
-                    💰 Total Income: <span class="text-gray-900">${{ total_income }}</span>
+                    💰 Total Income: <span class="text-gray-900">BDT {{ total_income }}</span>
                 </div>
                 <div class="text-red-600 font-bold text-lg">
-                    💸 Total Expense: <span class="text-gray-900">${{ total_expense }}</span>
+                    💸 Total Expense: <span class="text-gray-900">BDT {{ total_expense }}</span>
                 </div>
             </div>
 
@@ -127,7 +127,7 @@ View Transactions
                                 <span class="text-gray-500 text-sm">({{ transaction.payment_method }})</span>
                             </div>
                             <div class="text-lg font-bold {% if transaction.transaction_type == 'income' %}text-green-700{% else %}text-red-700{% endif %}">
-                                {% if transaction.transaction_type == 'income' %}+{% else %}-{% endif %} ${{ transaction.amount }}
+                                {% if transaction.transaction_type == 'income' %}+{% else %}-{% endif %} BDT {{ transaction.amount }}
                             </div>
                         </div>
                         <div class="text-gray-600 text-sm">

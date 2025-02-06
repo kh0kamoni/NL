@@ -131,6 +131,8 @@ def send_confirmation(request):
     if request.method == "POST":
         borrower_id = request.POST.get("borrower_id")
         amount = request.POST.get("amount")
+        deadline = request.POST.get("deadline")
+
 
         try:
             amount = float(amount)
@@ -152,7 +154,8 @@ def send_confirmation(request):
             lender=request.user,
             borrower=borrower,
             amount=amount,
-            status="pending"
+            status="pending",
+            deadline = deadline,
         )
 
         messages.success(request, f"Loan request sent to {borrower.username}!")
@@ -193,6 +196,7 @@ def approve_loan(request, loan_confirm_id):
         borrower=loan_request.borrower,
         amount=loan_request.amount,
         status="approved",
+        deadline = loan_request.deadline,
     )
     # loan.save()
     # Update balances
@@ -202,7 +206,7 @@ def approve_loan(request, loan_confirm_id):
     loan_request.delete()
 
     messages.success(request, "Loan approved successfully!")
-    return redirect("profile")
+    return redirect("confirm_loan")
 
 
 @login_required
@@ -215,8 +219,8 @@ def reject_loan(request, loan_confirm_id):
 
     loan_request.delete()
 
-    messages.info(request, "Loan request rejected.")
-    return redirect("profile")
+    messages.error(request, "Loan request rejected.")
+    return redirect("confirm_loan")
 
 @login_required
 def edit_profile(request):
@@ -298,28 +302,31 @@ def pay_for_others(request):
                 amount_per_user = total_amount / user_count
 
                 for form in user_amount_formset:
-                    user = form.cleaned_data['user']
+                    user = form.cleaned_data.get('user')
                     payer = request.user
+                    deadline = form.cleaned_data.get('deadline')  # ✅ Handle optional deadline
                     if user:  # Ensure a user is selected
+                        loan_request = LoanRequest.objects.create(
+                            lender=payer,
+                            borrower=user,
+                            amount=amount_per_user,
+                            status="pending",
+                            deadline=deadline,  # Can be None if not provided
+                        )
                         PaymentDetail.objects.create(
                             payment=payment,
                             user=user,
                             amount=amount_per_user,
-                        )
-                        LoanRequest.objects.create(
-                            lender = payer,
-                            borrower = user,
-                            amount = amount_per_user,
-                            status = "pending",
-
+                            loan_request = loan_request,
                         )
 
             else:
                 # Use custom amounts for each user
                 for form in user_amount_formset:
                     payer = request.user
-                    user = form.cleaned_data['user']
-                    amount = form.cleaned_data['amount']
+                    user = form.cleaned_data.get('user')
+                    amount = form.cleaned_data.get('amount')
+                    deadline = form.cleaned_data.get('deadline')  # ✅ Handle optional deadline
                     if user and amount:  # Ensure both user and amount are provided
                         PaymentDetail.objects.create(
                             payment=payment,
@@ -327,11 +334,11 @@ def pay_for_others(request):
                             amount=amount
                         )
                         LoanRequest.objects.create(
-                            lender = payer,
-                            borrower = user,
-                            amount = amount,
-                            status = "pending",
-
+                            lender=payer,
+                            borrower=user,
+                            amount=amount,
+                            status="pending",
+                            deadline=deadline,  # Can be None if not provided
                         )
 
             return redirect('payment_success')  # Redirect to a success page
@@ -345,6 +352,7 @@ def pay_for_others(request):
         "pending_loan_count": pending_loan_count,
         "unread_notifications": unread_notifications,
     })
+
 
 
 
@@ -383,6 +391,7 @@ def mark_notification_read(request, id):
         "pending_loan_count": pending_loan_count,
         "unread_notifications": unread_notifications,
     })
+
 
 
 @login_required

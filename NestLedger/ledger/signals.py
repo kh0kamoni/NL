@@ -1,11 +1,19 @@
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
-from .models import PaymentDetail, Notification,Transaction, UserProfile, Loan
+from .models import PaymentDetail, Notification,Transaction, UserProfile, Loan, LoanRequest 
+
 
 @receiver(post_save, sender=PaymentDetail)
 def send_payment_notification(sender, instance, created, **kwargs):
     if created:
-        message = f"{instance.payment.payer.username} paid {instance.amount} for you."
+        # Check if the loan_request is present
+        loan_request = instance.loan_request
+        if loan_request and loan_request.deadline != None:
+            message = f"{instance.payment.payer.first_name} paid {instance.amount} for you. Pay back within {loan_request.deadline}"
+        else:
+            message = f"{instance.payment.payer.first_name} paid {instance.amount} for you."
+        
+        # Create the notification for the user
         Notification.objects.create(user=instance.user, message=message)
 
 

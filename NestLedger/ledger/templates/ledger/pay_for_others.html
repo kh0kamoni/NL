@@ -177,6 +177,13 @@
                                         <p class="text-red-500 text-sm mt-1">{{ form.amount.errors }}</p>
                                     {% endif %}
                                 </div>
+                                <div>
+                                    <label class="block text-sm font-medium text-gray-700">Set Deadline (Optional)</label>
+                                    {{ form.deadline }}
+                                    {% if form.deadline.errors %}
+                                        <p class="text-red-500 text-sm mt-1">{{ form.deadline.errors }}</p>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
                     {% endfor %}
@@ -199,81 +206,87 @@
 </div>
 
 <script> 
-document.addEventListener('DOMContentLoaded', function() {
-    const container = document.getElementById('user-amount-forms');
-    const addButton = document.getElementById('add-user-form');
-    const totalForms = document.getElementById('id_form-TOTAL_FORMS');
-    const splitCheckbox = document.getElementById('{{ pay_form.split_equally.id_for_label }}');
-    const totalAmountInput = document.getElementById('id_total_amount');
-
-    // Add new user form
-    addButton.addEventListener('click', () => {
-        const formCount = parseInt(totalForms.value);
-        const newForm = container.children[0].cloneNode(true);
-        
-        // Update indices
-        newForm.innerHTML = newForm.innerHTML.replace(/form-(\d+)-/g, `form-${formCount}-`);
-        newForm.querySelectorAll('input, select').forEach(input => {
-            input.name = input.name.replace(/form-(\d+)-/, `form-${formCount}-`);
-            input.id = input.id.replace(/form-(\d+)-/, `form-${formCount}-`);
-            input.value = '';
+    document.addEventListener('DOMContentLoaded', function() {
+        const container = document.getElementById('user-amount-forms');
+        const addButton = document.getElementById('add-user-form');
+        const totalForms = document.getElementById('id_form-TOTAL_FORMS');
+        const splitCheckbox = document.getElementById('{{ pay_form.split_equally.auto_id }}');  // Fix the reference
+        const totalAmountInput = document.getElementById('id_total_amount');
+    
+        // Add new user form
+        addButton.addEventListener('click', () => {
+            const formCount = parseInt(totalForms.value);
+            const newForm = container.children[0].cloneNode(true);
+            
+            // Update indices correctly
+            newForm.innerHTML = newForm.innerHTML.replace(/form-(\d+)-/g, `form-${formCount}-`);
+            newForm.querySelectorAll('input, select').forEach(input => {
+                input.name = input.name.replace(/form-(\d+)-/, `form-${formCount}-`);
+                input.id = input.id.replace(/form-(\d+)-/, `form-${formCount}-`);
+                input.value = '';
+            });
+    
+            // Enable remove button
+            newForm.querySelector('.remove-user').disabled = false;
+            
+            container.appendChild(newForm);
+            totalForms.value = formCount + 1;
+            updateSplitCalculations();
         });
-        
-        // Enable remove button
-        newForm.querySelector('.remove-user').disabled = false;
-        
-        container.appendChild(newForm);
-        totalForms.value = formCount + 1;
-        updateSplitCalculations();
-    });
-
-    // Remove user form
-    container.addEventListener('click', e => {
-        if (e.target.classList.contains('remove-user')) {
-            const form = e.target.closest('.user-amount-form');
-            if (container.children.length > 1) {
-                form.remove();
-                reindexForms();
-                updateSplitCalculations();
+    
+        // Remove user form
+        container.addEventListener('click', e => {
+            if (e.target.classList.contains('remove-user')) {
+                const form = e.target.closest('.user-amount-form');
+                if (container.children.length > 1) {
+                    form.remove();
+                    reindexForms();
+                    updateSplitCalculations();
+                }
+            }
+        });
+    
+        // Reindex all forms
+        function reindexForms() {
+            Array.from(container.children).forEach((form, index) => {
+                form.querySelectorAll('input, select').forEach(input => {
+                    input.name = input.name.replace(/form-(\d+)-/, `form-${index}-`);
+                    input.id = input.id.replace(/form-(\d+)-/, `form-${index}-`);
+                });
+            });
+            totalForms.value = container.children.length;
+        }
+    
+        // Split calculations
+        function updateSplitCalculations() {
+            const amountInputs = document.querySelectorAll('input[id$="-amount"]');  // Fix selector
+            const userCount = container.children.length;
+            
+            if (splitCheckbox.checked && totalAmountInput.value) {
+                const amountPerUser = parseFloat(totalAmountInput.value) / userCount;
+                amountInputs.forEach(input => {
+                    input.disabled = true;
+                    input.value = amountPerUser.toFixed(2);
+                });
+            } else {
+                amountInputs.forEach(input => input.disabled = false);
             }
         }
-    });
-
-    // Reindex all forms
-    function reindexForms() {
-        Array.from(container.children).forEach((form, index) => {
-            form.querySelectorAll('input, select').forEach(input => {
-                input.name = input.name.replace(/form-(\d+)-/, `form-${index}-`);
-                input.id = input.id.replace(/form-(\d+)-/, `form-${index}-`);
-            });
-        });
-        totalForms.value = container.children.length;
-    }
-
-    // Split calculations
-    function updateSplitCalculations() {
-        const amountInputs = document.querySelectorAll('input[id$="-amount"]');
-        const userCount = container.children.length;
-        
-        if (splitCheckbox.checked && totalAmountInput.value) {
-            const amountPerUser = parseFloat(totalAmountInput.value) / userCount;
-            amountInputs.forEach(input => {
-                input.disabled = true;
-                input.value = amountPerUser.toFixed(2);
-            });
-        } else {
-            amountInputs.forEach(input => input.disabled = false);
-        }
-    }
-
-    // Event listeners
-    splitCheckbox.addEventListener('change', updateSplitCalculations);
-    totalAmountInput.addEventListener('input', updateSplitCalculations);
     
-    // Initial calculation
-    updateSplitCalculations();
-});
-</script>
-
-<script src="{% static 'ledger/nestledger.js' %}"></script>
+        // Event listeners
+        if (splitCheckbox) {
+            splitCheckbox.addEventListener('change', updateSplitCalculations);
+        }
+        
+        if (totalAmountInput) {
+            totalAmountInput.addEventListener('input', updateSplitCalculations);
+        }
+        
+        // Initial calculation
+        updateSplitCalculations();
+    });
+    </script>
+    
+    <script src="{% static 'ledger/nestledger.js' %}"></script>
+    
 {% endblock %}

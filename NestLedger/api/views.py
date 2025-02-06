@@ -4,10 +4,10 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.models import User
-from ledger.models import UserProfile, Transaction, Loan, LoanRequest
+from ledger.models import UserProfile, Transaction, Loan, LoanRequest, Notification
 from .serializers import UserSerializer, UserProfileSerializer, TransactionSerializer, LoanSerializer, LoanRequestSerializer, PayForOthersSerializer, PaymentDetailSerializer, NotificationSerializer
 from rest_framework.authtoken.models import Token
-from rest_framework.authentication import TokenAuthentication
+from rest_framework.authentication import TokenAuthentication, SessionAuthentication
 
 
 class HomeAPI(APIView):
@@ -75,6 +75,7 @@ class UserLoginAPI(APIView):
         return Response({"error": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
 class UserLogoutAPI(APIView):
+    # authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request):
@@ -82,14 +83,17 @@ class UserLogoutAPI(APIView):
         return Response({"message": "User logged out successfully"}, status=status.HTTP_200_OK)
 
 class ProfileAPI(APIView):
-    authentication_classes = [TokenAuthentication]
     permission_classes = [IsAuthenticated]
+
+    authentication_classes = [TokenAuthentication, SessionAuthentication]
 
     def get(self, request):
         user = request.user
         transactions = Transaction.objects.filter(user=user)
         loans_given = Loan.objects.filter(lender=user)
         loans_received = Loan.objects.filter(borrower=user)
+        pending_loan_count = LoanRequest.pending_count(user)
+        unread_notifications = Notification.unread_count(user)
 
         total_loan_given = sum(loan.amount for loan in loans_given if loan.status == 'approved')
         total_loan_taken = sum(loan.amount for loan in loans_received if loan.status == 'approved')
@@ -110,6 +114,8 @@ class ProfileAPI(APIView):
             'total_loan_taken': total_loan_taken,
             'amount_due': amount_due,
             'amount_receive': amount_receive,
+            'pending_loan_count': pending_loan_count,
+            'unread_notifications': unread_notifications,
         }, status=status.HTTP_200_OK)
 
 class SendConfirmationAPI(APIView):

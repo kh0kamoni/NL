@@ -121,6 +121,28 @@
 
 <div class="container mx-auto px-4 py-8">
     <h2 class="text-2xl font-semibold text-gray-800 mb-6">Pending Loan Requests</h2>
+    <!-- Messages Section -->
+    {% if messages %}
+    <div class="mb-6 fade-out" > 
+        {% for message in messages %}
+            <p class="p-4 text-sm rounded-lg 
+                      {% if message.tags == 'error' %}bg-red-100 text-red-700
+                      {% else %}bg-green-100 text-green-700{% endif %}">
+                {{ message }}
+            </p>
+        {% endfor %}
+    </div>
+{% endif %}
+     <script>
+            // Remove error message after 2 seconds
+            setTimeout(() => {
+              document.querySelectorAll('.fade-out').forEach(el => {
+                el.style.transition = "opacity 0.5s";
+                el.style.opacity = "0"; 
+                setTimeout(() => el.remove(), 500); // Remove from DOM after fading
+              });
+            }, 2000);
+          </script>
 
     {% if pending_requests %}
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
@@ -130,9 +152,10 @@
                         <div class="flex justify-between items-center">
                             <div>
                                 <p class="text-lg font-medium text-gray-900">
-                                    <span class="font-semibold">{{ request.lender.username }}</span> said, you took a loan of amount: <span class="font-semibold">${{ request.amount }}</span>
+                                    <span class="font-semibold">{{ request.lender.username }}</span> said, you took a loan of amount <span class="font-semibold">BDT: {{ request.amount }}</span>
                                 </p>
                                 <p class="text-sm text-gray-500">Request ID: {{ request.id }}</p>
+                                <p class="text-sm text-gray-500 text-red-500 font-bold">Payment Deadline: {{ request.deadline }}</p>
                             </div>
                             <div class="flex space-x-4">
                                 <!-- Approve Loan Form -->

@@ -146,7 +146,7 @@
         <p class="text-4xl font-extrabold text-gray-800 mb-2">Welcome back,</p>
         <p class="text-3xl font-semibold text-indigo-600 mb-4">{{ user.first_name }} ({{ user.username }})</p>
         <p class="text-lg text-gray-600">Your current balance is</p>
-        <p class="text-2xl font-semibold text-green-600 mt-2">${{ user.userprofile.balance }}</p>
+        <p class="text-2xl font-semibold text-green-600 mt-2">BDT {{ user.userprofile.balance }}</p>
     </div>
 </div>
 
@@ -164,7 +164,7 @@
                 </svg>
                 <div>
                     <p class="text-lg font-medium text-gray-800">Total Loan Given</p>
-                    <p class="text-2xl font-semibold text-gray-900 mt-2">${{ total_loan_given }}</p>
+                    <p class="text-2xl font-semibold text-gray-900 mt-2">BDT {{ total_loan_given }}</p>
                 </div>
             </div>
         </div>
@@ -178,7 +178,7 @@
                 </svg>
                 <div>
                     <p class="text-lg font-medium text-gray-800">Total Loan: My Due</p>
-                    <p class="text-2xl font-semibold text-gray-900 mt-2">${{ total_loan_taken }}</p>
+                    <p class="text-2xl font-semibold text-gray-900 mt-2">BDT {{ total_loan_taken }}</p>
                 </div>
             </div>
         </div>
@@ -199,7 +199,7 @@
                             <div class="flex justify-between items-center">
                                 <div>
                                     <p class="text-gray-800 text-lg font-semibold">Borrower: <span class="text-blue-600">{{ loan.borrower.first_name }}</span></p>
-                                    <p class="text-gray-700"><span class="font-semibold">Amount:</span> ${{ loan.amount }}</p>
+                                    <p class="text-gray-700"><span class="font-semibold">Amount:</span> BDT {{ loan.amount }}</p>
                                     <p class="text-gray-700"><span class="font-semibold">Status:</span> 
                                         <span class="px-2 py-1 rounded-md 
                                             {% if loan.status == 'paid' %}bg-green-100 text-green-600{% else %}bg-yellow-100 text-yellow-600{% endif %}">
@@ -227,7 +227,7 @@
                             <div class="flex justify-between items-center">
                                 <div>
                                     <p class="text-gray-800 text-lg font-semibold">Lender: <span class="text-blue-600">{{ loan.lender.first_name }}</span></p>
-                                    <p class="text-gray-700"><span class="font-semibold">Amount:</span> ${{ loan.amount }}</p>
+                                    <p class="text-gray-700"><span class="font-semibold">Amount:</span> BDT {{ loan.amount }}</p>
                                     <p class="text-gray-700"><span class="font-semibold">Status:</span> 
                                         <span class="px-2 py-1 rounded-md 
                                             {% if loan.status == 'paid' %}bg-green-100 text-green-600{% else %}bg-yellow-100 text-yellow-600{% endif %}">

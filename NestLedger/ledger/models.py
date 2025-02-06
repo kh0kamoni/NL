@@ -51,6 +51,7 @@ class Loan(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=50, default='pending')
     timestamp = models.DateTimeField(auto_now_add=True)
+    deadline = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return f"{self.borrower} took loan of {self.amount} from {self.lender}"
@@ -67,6 +68,7 @@ class LoanRequest(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, default='pending')
     timestamp = models.DateTimeField(auto_now_add=True)
+    deadline = models.DateField(blank=True, null=True)
 
     def __str__(self):
         return f"Loan Request: {self.lender} → {self.borrower} ({self.amount})"
@@ -92,7 +94,7 @@ class PaymentDetail(models.Model):
     payment = models.ForeignKey('PayForOthers', related_name='details', on_delete=models.CASCADE)
     user = models.ForeignKey(User, related_name='payment_details', on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=10, decimal_places=2)  # Amount paid for this user
-
+    loan_request = models.ForeignKey('LoanRequest', related_name='payments', on_delete=models.SET_NULL, null=True, blank=True)  # Reference to LoanRequest
     def __str__(self):
         return f"{self.payment.payer.username} paid {self.amount} for {self.user.username}"
     

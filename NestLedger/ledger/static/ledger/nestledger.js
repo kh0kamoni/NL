@@ -44,7 +44,7 @@
     // Function to mark a notification as read
     function markAsRead(notificationId) {
         // Send a GET request to mark the notification as read
-        fetch(`/mark_as_read/${notificationId}/`, {
+        fetch(`/mark_as_read/BDT {notificationId}/`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
