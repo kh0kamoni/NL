@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'django_celery_beat',
+    "django_extensions",
 ]
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Stores sessions in DB
