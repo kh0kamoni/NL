@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "api",
     'rest_framework',
     'rest_framework.authtoken',
+    'django_celery_beat',
 ]
 
 SESSION_ENGINE = "django.contrib.sessions.backends.db"  # Stores sessions in DB
@@ -162,3 +163,9 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'm.khokamoni@gmail.com'
 EMAIL_HOST_PASSWORD = 'nnzr emwe yxkk tsac'
 DEFAULT_FROM_EMAIL = 'm.khokamoni@gmail.com'
+
+
+
+CELERY_BROKER_URL = "redis://localhost:6379/0"  # Make sure Redis is installed & running
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"

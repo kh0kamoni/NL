@@ -158,8 +158,8 @@ def send_confirmation(request):
             deadline = deadline,
         )
 
-        messages.success(request, f"Loan request sent to {borrower.username}!")
-        return redirect("profile")
+        messages.success(request, f"Loan confirmation sent to {borrower.first_name}!")
+        return redirect("send_confirmation")
 
     users = User.objects.exclude(id=request.user.id)  # Exclude self
     return render(request, "ledger/send_confirmation.html", {

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     balance = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    is_restricted = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.username
@@ -68,7 +69,7 @@ class LoanRequest(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, default='pending')
     timestamp = models.DateTimeField(auto_now_add=True)
-    deadline = models.DateField(blank=True, null=True)
+    deadline = models.DateField(blank=True, null=True, default=None)
 
     def __str__(self):
         return f"Loan Request: {self.lender} → {self.borrower} ({self.amount})"

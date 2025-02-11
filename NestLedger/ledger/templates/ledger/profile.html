@@ -146,7 +146,11 @@
         <p class="text-4xl font-extrabold text-gray-800 mb-2">Welcome back,</p>
         <p class="text-3xl font-semibold text-indigo-600 mb-4">{{ user.first_name }} ({{ user.username }})</p>
         <p class="text-lg text-gray-600">Your current balance is</p>
+        {% if user.userprofile.balance > 0 %}
         <p class="text-2xl font-semibold text-green-600 mt-2">BDT {{ user.userprofile.balance }}</p>
+        {% else %}
+        <p class="text-2xl font-semibold text-red-600 mt-2">BDT {{ user.userprofile.balance }}</p>
+        {% endif %}
     </div>
 </div>
 
@@ -207,6 +211,7 @@
                                         </span>
                                     </p>
                                     <p class="text-gray-600 text-sm">🗓 {{ loan.timestamp|date:"M d, Y - H:i A" }}</p>
+                                    <p class="text-red-600 text-sm">🗓 Payment Deadline: {{ loan.deadline|date:"M d, Y" }}</p>
                                 </div>
                             </div>
                         </li>
@@ -220,6 +225,27 @@
             <!-- Loans Received Section -->
             <div class="bg-white rounded-lg shadow-md p-6 mb-6">
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">Loans Received</h2>
+                {% if messages %}
+        <div class="mb-6 fade-out" > 
+            {% for message in messages %}
+                <p class="p-4 text-sm rounded-lg 
+                          {% if message.tags == 'error' %}bg-red-100 text-red-700
+                          {% else %}bg-green-100 text-green-700{% endif %}">
+                    {{ message }}
+                </p>
+            {% endfor %}
+        </div>
+    {% endif %}
+         <script>
+                // Remove error message after 2 seconds
+                setTimeout(() => {
+                  document.querySelectorAll('.fade-out').forEach(el => {
+                    el.style.transition = "opacity 0.5s";
+                    el.style.opacity = "0"; 
+                    setTimeout(() => el.remove(), 500); // Remove from DOM after fading
+                  });
+                }, 2000);
+              </script>
                 <div class="overflow-y-auto custom-scrollbar max-h-96">
                     <ul class="space-y-3">
                         {% for loan in loans_received %}
@@ -236,6 +262,7 @@
                                     </p>
                                     
                                     <p class="text-gray-600 text-sm">🗓 {{ loan.timestamp|date:"M d, Y - H:i A" }}</p>
+                                    <p class="text-red-600 text-sm">🗓 Payment Deadline: {{ loan.deadline|date:"M d, Y" }}</p>
                                 </div>
 
                                 <div>
