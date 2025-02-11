@@ -13,7 +13,7 @@
 
 
 
-<body class="bg-gray-100">
+<!-- <body class="bg-gray-100"> -->
     {% block navbar %}
     <nav class="backdrop-blur-2xl bg-white/10 shadow-xl border border-white/10 p-4 h-20 flex justify-between items-center rounded-2xl mx-4 my-2 sticky top-0 z-50">
 
@@ -73,6 +73,8 @@
                 </div>
             </li>
         </ul>
+
+        
     </nav>
 
 
@@ -283,6 +285,16 @@
             </div>
         </div>
     </div>
+    <script>
+        function toggleMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.remove('hidden');
+            } else {
+                mobileMenu.classList.add('hidden');
+            }
+        }
+    </script>
     <script src="{% static 'ledger/nestledger.js' %}"></script>
     {% endblock %}
 
